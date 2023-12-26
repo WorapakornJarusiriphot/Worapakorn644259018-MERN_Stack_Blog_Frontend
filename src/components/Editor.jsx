@@ -23,12 +23,17 @@ const Editor = (value, onChange) => {
     ];
     const modules = {
         toolbar: toolbarOptions,
-    }
+    };
     return (
         <div className="content">
-            <ReactQuill value={value} theme="snow" modules={modules} />
+            <ReactQuill
+                value={value}
+                theme="snow"
+                modules={modules}
+                onChange={onChange}
+            />
         </div>
-    )
-}
+    );
+};
 
-export default Editor
+export default Editor;
