@@ -1,36 +1,52 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+const baseURL = import.meta.env.VITE_BASE_URL;
 
-const Post = () => {
+function Post() {
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get(`${baseURL}/posts`);
+                setPosts(response.data);
+            } catch (error) {
+                console.error('Error fetching posts', error);
+            }
+        };
+
+        fetchPosts();
+    }, []);
+
     return (
-        <div className="post">
-            <div className="image">
-                <Link to="/post/1">
-                    <img src="https://missiontothemoon.co/wp-content/uploads/2021/12/01-1024x1024.jpg" alt="" />
-                </Link>
-            </div>
-            <div className="texts">
-                <Link to="/post/1">
-                    <h2>‘ให้อภัยตัวเอง – รู้จักคุณค่าตัวเอง – มีชีวิตเพื่อตัวเอง’</h2>
-                </Link>
-                <p className="info">
-                    <a href="" className="author">
-                        WOJA
-                    </a>
-                    <time> 12/12/2566 </time>
-                </p>
-                <p className="summary">
-                    ‘ให้อภัยตัวเอง – รู้จักคุณค่าตัวเอง – มีชีวิตเพื่อตัวเอง’
-
-                    การเดินทางตลอดหนึ่งปีที่ผ่านมา เราต้องเจอกับเรื่องราวมากมาย เผชิญหน้ากับเหตุการณ์ไม่คาดคิด และรับมือกับหลายความรู้สึกที่เกาะกุมอยู่ในใจ ด้วยเหตุนี้ ยิ่งใกล้ช่วงท้ายปี หลายคนเลยอยากปล่อยให้ ‘ปีเก่า’ เป็นเรื่องราวของ ‘ปีเก่า’ พร้อมทิ้งเรื่องราวเดิมๆ ไว้ข้างหลังและมุ่งหน้าสู่การเดินทางใหม่ที่กำลังจะมาถึง
-
-                    แต่แทนที่จะโยนทิ้งและปล่อยให้เป็นเรื่องราวในอดีตเฉยๆ อย่าลืมว่าจริงๆ แล้วการเดินทางอันยาวนานตลอด 1 ปีที่ผ่านมาให้อะไรเรามากมาย  มาร่วมส่งท้ายปีเก่าด้วยการรู้จักตัวเอง ย้อนมองบทเรียน และรับกำลังใจดีๆ ผ่าน 12 บทความให้กำลังใจจาก Mission To The Moon
-
-                    ก่อนจะโอบรับการเดินทางครั้งใหม่ด้วยกำลังใจเต็มเปี่ยมไปด้วยกัน
-                </p>
-            </div>
+        <div>
+            {posts.map(post => (
+                <div className="post" key={post._id}>
+                    <div className="image">
+                        <Link to={`/post/${post._id}`}>
+                            <img src={post.cover} alt="" />
+                        </Link>
+                    </div>
+                    <div className="texts">
+                        <Link to={`/post/${post._id}`}>
+                            <h2>{post.title}</h2>
+                        </Link>
+                        <p className="info">
+                            <a href="" className="author">
+                                {post.author}
+                            </a>
+                            <time>Created at: {new Date(post.createdAt).toLocaleString()}</time>
+                            <time>Updated at: {new Date(post.updatedAt).toLocaleString()}</time>
+                        </p>
+                        <p className="summary">
+                            {post.summary}
+                        </p>
+                    </div>
+                </div>
+            ))}
         </div>
-    )
+    );
 }
 
-export default Post
+export default Post;

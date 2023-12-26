@@ -5,12 +5,6 @@ const IndexPage = () => {
     return (
         <div>
             <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
         </div>
     )
 }
